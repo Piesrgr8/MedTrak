@@ -25,28 +25,44 @@ public class MedTrak extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	// private static JPanel mainPanel = new JPanel();
-	private static JFrame mainFrame = new JFrame("MedTrak");
+	public static JFrame mainFrame;
 	
 	private static String[] columnNames = {"Date", "Time", "Pill"};
 	private static Connection con;
 	private static PreparedStatement pst;
+	
+	public MedTrak() {
+		super("MedTrak");
+		mainFrame = this;
+		WindowManager wm = new WindowManager();
+		addWindowListener(wm);
+		add(new HomeFrame().getPanel(), BorderLayout.NORTH);
+		//mainFrame.add(initTable(), BorderLayout.CENTER);
+		setSize(800,600);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
 	
 	public static void main(String[] args) {
 		String dbLogin = "jdbc:mysql://108.167.143.90:3306/" + "chrisdbo_MedTrak";
 		try {
 			con = DriverManager.getConnection(dbLogin, "chrisdbo_jared", "A14e09j18");
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
-		
+		new MedTrak();
+		/*
 		WindowManager wm = new WindowManager();
 		mainFrame.addWindowListener(wm);
 		mainFrame.add(new HomeFrame().getPanel(), BorderLayout.NORTH);
-		mainFrame.add(initTable(), BorderLayout.CENTER);
+		//mainFrame.add(initTable(), BorderLayout.CENTER);
 		mainFrame.setSize(800,600);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
+		*/
 	}
 	
 	public static JPanel initTable() {
@@ -111,7 +127,7 @@ public class MedTrak extends JFrame{
 		return panel;
 	}
 	
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		return con;
 	}
 }

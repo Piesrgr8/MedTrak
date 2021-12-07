@@ -8,12 +8,10 @@ import org.piesrgr8.dev.MedTrak;
 
 public class WindowManager extends WindowAdapter{
 	
-	MedTrak mt = new MedTrak();
-	
 	public void windowClosing(WindowEvent e) {
 		System.out.println("Closing Window...");
 		try {
-			mt.getConnection().close();
+			MedTrak.getConnection().close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
