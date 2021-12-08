@@ -1,4 +1,4 @@
-package org.piesrgr8.dev;
+package org.piesrgr8.dev.manager;
 
 public class ConsoleColors {
     // Reset

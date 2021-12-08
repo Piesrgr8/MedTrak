@@ -17,11 +17,12 @@ public class HomeFrame extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static JPanel jp = new JPanel(new FlowLayout());
+	private static JPanel jp;
 	private JButton track = new JButton("Track");
 	private JButton mList = new JButton("Med List");
 
 	public HomeFrame() {
+		HomeFrame.jp = this;
 		JPanel options = new JPanel(new FlowLayout());
 		options.add(track);
 		options.add(mList);
@@ -43,7 +44,7 @@ public class HomeFrame extends JPanel{
 			}
 		});
 		
-		jp.add(options);
+		add(options);
 	}
 
 	public JPanel getPanel() {
