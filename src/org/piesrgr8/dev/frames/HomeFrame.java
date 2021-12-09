@@ -40,6 +40,9 @@ public class HomeFrame extends JPanel{
 		mList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				MedTrak.mainFrame.getContentPane().removeAll();
+				MedTrak.mainFrame.getContentPane().add(new MedListFrame().getPanel(), BorderLayout.CENTER);
+				MedTrak.mainFrame.getContentPane().revalidate();
 				System.out.println("MedList Button Clicked!");
 			}
 		});

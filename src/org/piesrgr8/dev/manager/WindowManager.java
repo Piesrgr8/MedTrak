@@ -1,5 +1,6 @@
 package org.piesrgr8.dev.manager;
 
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -39,6 +40,7 @@ public class WindowManager extends WindowAdapter {
 
 	public void windowIconified(WindowEvent event) {
 		System.out.println("Window Minimized!");
+		new SystemIcon().send("MedTrak is still running.", "We'll notify you.", MessageType.INFO);
 	}
 
 	public void windowOpened(WindowEvent event) {

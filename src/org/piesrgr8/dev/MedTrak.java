@@ -1,9 +1,11 @@
 package org.piesrgr8.dev;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.TrayIcon.MessageType;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,14 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import org.piesrgr8.dev.frames.HomeFrame;
-import org.piesrgr8.dev.manager.Notification;
+import org.piesrgr8.dev.manager.SystemIcon;
 import org.piesrgr8.dev.manager.WindowManager;
 
 public class MedTrak extends JFrame {
@@ -28,15 +31,15 @@ public class MedTrak extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// private static JPanel mainPanel = new JPanel();
 	public static JFrame mainFrame;
 
 	private static String[] columnNames = { "Date", "Time", "Pill" };
 	private static Connection con;
 	private static PreparedStatement pst;
 	private Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("medtrak.png"));
+	private static SystemIcon sys = new SystemIcon();
 
-	public MedTrak() {
+	public MedTrak() throws AWTException {
 		super("MedTrak");
 		MedTrak.mainFrame = this;
 		WindowManager wm = new WindowManager();
@@ -46,29 +49,30 @@ public class MedTrak extends JFrame {
 		setIconImage(img);
 		setSize(800, 600);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.ICONIFIED);
 		setVisible(true);
 	}
 
 	public static void main(String[] args) {
+		try {
+			sys.systemTrayInit();
+		} catch (AWTException e1) {
+			e1.printStackTrace();
+		}
+		
 		String dbLogin = "jdbc:mysql://108.167.143.90:3306/" + "chrisdbo_MedTrak";
 		try {
 			con = DriverManager.getConnection(dbLogin, "chrisdbo_jared", "iwantthistowork");
 		} catch (SQLException e) {
-			Notification.send("Communications Link Failure", "SQL Server did not respond!", MessageType.ERROR);
+			sys.send("Communications Link Failure", "SQL Server did not respond!", MessageType.ERROR);
 			e.printStackTrace();
 		}
 		
-		new MedTrak();
-		/*
-		 * WindowManager wm = new WindowManager();
-		 * mainFrame.addWindowListener(wm); mainFrame.add(new
-		 * HomeFrame().getPanel(), BorderLayout.NORTH);
-		 * //mainFrame.add(initTable(), BorderLayout.CENTER);
-		 * mainFrame.setSize(800,600); mainFrame.setLocationRelativeTo(null);
-		 * mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		 * mainFrame.setVisible(true);
-		 */
+		try {
+			new MedTrak();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static JPanel initTable() {
@@ -116,7 +120,8 @@ public class MedTrak extends JFrame {
 			}
 
 			if (i < 1) {
-				JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+				JLabel l = new JLabel("No Records Found!", SwingConstants.CENTER);
+				panel.add(l, BorderLayout.NORTH);
 			}
 
 			if (i == 1) {
@@ -125,10 +130,15 @@ public class MedTrak extends JFrame {
 				System.out.println(i + " Records Found");
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JLabel l = new JLabel("Connection Null", SwingConstants.CENTER);
+			panel.add(l, BorderLayout.NORTH);
 		}
 		panel.add(scroll);
 		return panel;
+	}
+	
+	public static URL getIconUrl() {
+		return MedTrak.class.getResource("medtrak.png");
 	}
 
 	public static Connection getConnection() {
