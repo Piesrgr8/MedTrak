@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import org.piesrgr8.dev.frames.HomeFrame;
+import org.piesrgr8.dev.manager.FileManager;
 import org.piesrgr8.dev.manager.SystemIcon;
 import org.piesrgr8.dev.manager.WindowManager;
 
@@ -38,6 +39,7 @@ public class MedTrak extends JFrame {
 	private static PreparedStatement pst;
 	private Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("medtrak.png"));
 	private static SystemIcon sys = new SystemIcon();
+	private static FileManager fm = new FileManager();
 
 	public MedTrak() throws AWTException {
 		super("MedTrak");
@@ -59,6 +61,8 @@ public class MedTrak extends JFrame {
 		} catch (AWTException e1) {
 			e1.printStackTrace();
 		}
+		
+		fm.createDir();
 		
 		String dbLogin = "jdbc:mysql://108.167.143.90:3306/" + "chrisdbo_MedTrak";
 		try {
