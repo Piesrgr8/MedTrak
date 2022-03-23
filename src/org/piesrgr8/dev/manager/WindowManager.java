@@ -3,9 +3,6 @@ package org.piesrgr8.dev.manager;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
-
-import org.piesrgr8.dev.MedTrak;
 
 public class WindowManager extends WindowAdapter {
 	
@@ -13,13 +10,6 @@ public class WindowManager extends WindowAdapter {
 
 	public void windowClosing(WindowEvent e) {
 		System.out.println("Closing Window...");
-		if (MedTrak.getConnection() != null) {
-			try {
-				MedTrak.getConnection().close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
 	}
 
 	public void windowActivated(WindowEvent event) {
